@@ -1,0 +1,14 @@
+@import './_variables.scss';
+@import './_libs';
+@import './_mixins.scss';
+@import './_fonts';
+
+* {
+    box-sizing: border-box;
+    font-family: Montserrat, serif
+}
+
+.container {
+    max-width: 1280px;
+    margin: 0 auto
+}
