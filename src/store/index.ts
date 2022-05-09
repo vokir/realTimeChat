@@ -1,13 +1,28 @@
 import { configureStore, ThunkAction, Action, combineReducers } from '@reduxjs/toolkit';
 import userReducer from './slices/UserSlice'
+import chatReducer from './slices/ChatSlice'
+import { getFirestore } from 'firebase/firestore';
 
 const rootReducer = combineReducers({
-  user: userReducer
+  user: userReducer,
+  chat: chatReducer
 })
+
 
 
 export const store = configureStore({
   reducer: rootReducer,
+  middleware: (getDefaultMiddleware) =>
+    getDefaultMiddleware({
+      serializableCheck: {
+        ignoredPaths: ['firebase', 'firestore'],
+      },
+      thunk: {
+        extraArgument: {
+          getFirestore,
+        },
+      },
+    }),
 });
 
 export type AppDispatch = typeof store.dispatch;

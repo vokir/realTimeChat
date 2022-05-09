@@ -1,78 +1,66 @@
 .input-group {
+    display: block;
     position: relative;
-    margin: 0 0 30px;
+    width: 100%;
+    height: 48px;
+    border-radius: 8px;
+    border: 0px;
 
     &__input {
-        outline: none;
-        z-index: 1;
+        display: block;
         position: relative;
-        background: none;
         width: 100%;
-        height: 60px;
-        border: 0;
-        color: #212121;
-        font-size: 24px;
-        font-weight: 400;
+        height: 48px;
+        border-radius: 8px;
+        padding: 16px;
+        background-color: var(--background);
+        border: 2px solid var(--light-gray);
 
         &:focus {
-            ~.input-group__label {
-                color: #9d9d9d;
-                transform: translate(-12%, -50%) scale(0.75);
-            }
-
-            ~.input-group__bar {
-
-                &:before,
-                &:after {
-                    width: 50%;
-                }
-            }
+            background-color: var(--background);
+            border: 2px solid var(--black);
+            outline: none;
         }
 
-        &--active {
-            ~.input-group__label {
-                color: #9d9d9d;
-                transform: translate(-12%, -50%) scale(0.75);
-            }
+        &:not([value=""]) {
+            border: 2px solid var(--black);
+        }
+
+        &[type="password"] {
+            letter-spacing: 2;
+        }
+
+        &:focus~.input-group__label,
+        &:not([value=""])~.input-group__label {
+            top: -10px;
+            left: 8px;
+            font-size: 14px;
+            opacity: 1;
+            padding: 1px 8px;
+            border-radius: 2px;
+        }
+
+        &:not([value=""])~.input-group__label {
+            background-color: var(--background);
+            color: var(--black);
+        }
+
+        &:focus~.input-group__label {
+            background-color: var(--black);
+            color: white;
         }
     }
 
     &__label {
+        font-size: 16px;
         position: absolute;
-        top: 0;
-        left: 0;
-        color: #757575;
-        font-size: 24px;
-        font-weight: 300;
-        line-height: 60px;
-        transition: all 0.25s ease-in-out;
-
-    }
-
-    &__bar {
-        position: absolute;
-        left: 0;
-        bottom: 0;
-        background: #757575;
-        width: 100%;
-        height: 1px;
-
-        &:before,
-        &:after {
-            content: '';
-            position: absolute;
-            background: #ed2553;
-            width: 0;
-            height: 2px;
-            transition: .2s ease;
-        }
-
-        &:before {
-            left: 50%;
-        }
-
-        &:after {
-            right: 50%;
-        }
+        display: inline-block;
+        left: 16px;
+        top: 14px;
+        pointer-events: none;
+        z-index: 1;
+        color: var(--light-gray);
+        opacity: 0.5;
+        transition: 0.4s cubic-bezier(0.65, -0.32, 0.38, 1.23) all;
     }
 }

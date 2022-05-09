@@ -1,0 +1,20 @@
+.chat-list {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+
+    &__item {
+        padding: 10px;
+        margin-bottom: 15px;
+        border: 2px solid var(--black);
+        transition: all 0.25s ease-in-out;
+
+        &--active {
+            border-color: var(--primary);
+        }
+
+        &:hover {
+            border-color: var(--primary);
+        }
+    }
+}

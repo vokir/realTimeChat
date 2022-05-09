@@ -6,7 +6,7 @@ import { useNavigate } from 'react-router-dom';
 import { NavLink } from 'react-router-dom';
 import Button from '../../components/ui/Button/Button';
 import Input from '../../components/ui/Input/Input';
-import './LoginPage.scss'
+import Form from '../../components/Form/Form';
 
 
 const Login: FC = () => {
@@ -38,12 +38,12 @@ const Login: FC = () => {
     }
 
     return (
-        <div className='register__container container'>
+        <Form id="login">
             <Input type="email" value={email} onChange={(e: React.ChangeEvent<HTMLInputElement>) => setEmail(e.target.value)} label='E-mail' name='email' />
             <Input type="password" value={pass} onChange={(e: React.ChangeEvent<HTMLInputElement>) => setPass(e.target.value)} label='Пароль' name='pass' />
             <Button loading={loading} onClick={login}>Войти</Button>
             <NavLink className="link" to={'/register'}>зарегистрироваться</NavLink>
-        </div>
+        </Form>
     )
 }
 

@@ -12,7 +12,6 @@ const Input: FC<IInputProps> = ({ label, name, classes, ...attrs }) => {
     return (
         <div className="input-group">
             <input className={computedClasses} name={name} id={name} {...attrs} />
-            <span className="input-group__bar"></span>
             <label htmlFor={name} className="input-group__label">{label}</label>
         </div>
     )

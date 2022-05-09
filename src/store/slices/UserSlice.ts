@@ -2,7 +2,8 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 export interface IUserState {
     email?: string,
-    id?: string,
+    uid?: string,
+    username?: string,
     users?: Array<{
         username: string,
         email: string,
@@ -12,7 +13,8 @@ export interface IUserState {
 
 const initialState: IUserState = {
     email: '',
-    id: '',
+    uid: '',
+    username: '',
     users: []
 }
 
@@ -22,16 +24,18 @@ const userSlice = createSlice({
     reducers: {
         setUser(state, action) {
             state.email = action.payload.email
-            state.id = action.payload.id
+            state.uid = action.payload.uid
+            state.username = action.payload.username
         },
         removeUser(state) {
             state.email = ''
-            state.id = ''
+            state.uid = ''
+            state.username = ''
         },
         usersFetching(state, action: PayloadAction<IUserState>) {
             state.users = action.payload.users
         }
-    }
+    },
 })
 
 export const { setUser, removeUser, usersFetching } = userSlice.actions

@@ -1,4 +1,5 @@
 import { Navigate, RouteObject } from "react-router-dom";
+import Messages from "../components/Messages/Messages";
 import Chat from '../pages/ChatPage/ChatPage'
 import Login from '../pages/LoginPage/LoginPage'
 import Register from "../pages/RegisterPage/RegisterPage";
@@ -25,7 +26,13 @@ export const privateRoutes: RouteObject[] = [
     },
     {
         path: "/chat",
-        element: <Chat />
-    }
+        element: <Chat />,
+        children: [
+            {
+                path: "/chat/:id",
+                element: <Messages />
+            }
+        ]
+    },
 ];
 
