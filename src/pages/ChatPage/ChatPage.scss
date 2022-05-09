@@ -1,6 +1,28 @@
 .chat__container {
     padding-top: 40px;
     display: grid;
+    gap: 50px;
     grid-template-columns: 300px 1fr;
-    gap: 0 40px;
+    grid-template-rows: 90px 1fr;
+    grid-template-areas:
+        "top top"
+        "left right";
+}
+
+.chat__header {
+    grid-area: top;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.left-side {
+    grid-area: left;
+    display: flex;
+    flex-direction: column;
+    gap: 40px;
+}
+
+.right-side {
+    grid-area: right;
 }

@@ -1,23 +1,32 @@
 import React, { FC } from 'react'
-import ChatListItem from './ChatListItem/ChatListItem'
 import './ChatList.scss'
+import ListElement from './ListElement/ListElement'
+import { IListElement } from './type'
 
-interface IChatList {
-    items: Array<{
-        username: string,
-        email: string,
-        uid: string
-    }> | undefined,
-    func: (value: string) => void,
-    selected: string
-}
-const ChatList: FC<IChatList> = ({ items, func, selected }) => {
+const ChatList: FC = () => {
+
+    const groups: IListElement[] = [
+        {
+            name: "boba chat",
+            id: "XL7nkmDm2C2LrQZZfFGm",
+        },
+        {
+            name: "boba chat2",
+            id: "y7nP3tkcJFODcFB8k9jG",
+        },
+        {
+            name: "boba chat2",
+            id: "YFCmaV2klxq6G9fToIfG",
+        },
+    ]
+
+
+
     return (
-        <ul className='chat-list'>
-            {items?.map(item =>
-                <ChatListItem selected={selected} func={() => func(item.uid)} item={item} key={item.uid} />
-            )}
-        </ul>
+        <div className="chat-list">
+            <b>Список чатов</b>
+            {groups.map(group => <ListElement {...group} key={group.id} />)}
+        </div>
     )
 }
 

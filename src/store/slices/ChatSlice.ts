@@ -1,6 +1,6 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
-import { fetchGroupsById, fetchMessagesById } from "../actionCreators/chatCreator"
+import { fetchGroupsById, fetchMessagesById } from "../actionCreators/chatCreator";
 
 export interface IChatState {
     groups?: any[],
@@ -24,9 +24,12 @@ const chatSlice = createSlice({
         }
     },
     extraReducers: {
-        // [fetchGroupsById.fulfilled.type]: (state, action: PayloadAction<IChatState>) => {
-        //     state.groups = action.payload.groups
-        // },
+        [fetchGroupsById.fulfilled.type]: (state, action: PayloadAction<IChatState>) => {
+            // state.groups = action.payload.groups
+        },
+        [fetchMessagesById.fulfilled.type]: (state, action: PayloadAction<IChatState>) => {
+            // console.log(action);
+        }
     }
 })
 

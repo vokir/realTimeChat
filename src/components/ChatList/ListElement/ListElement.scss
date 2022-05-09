@@ -1,0 +1,17 @@
+.chat-list__item {
+    padding: 15px;
+    font-size: 16px;
+    background: var(--black);
+    border-radius: 8px;
+    color: white;
+    cursor: pointer;
+    transition: all 0.25s ease-in-out;
+
+    &:hover {
+        opacity: 0.8;
+    }
+
+    &--active {
+        background: var(--primary);
+    }
+}
