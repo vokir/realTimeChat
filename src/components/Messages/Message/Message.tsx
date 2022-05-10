@@ -1,9 +1,9 @@
 import React, { FC } from 'react'
 import { useAppSelector } from '../../../hooks/reduxHooks'
 import './Message.scss'
-import { IMessageProps } from '../type'
+import { MessagesType } from '../../../store/slices/ChatSlice'
 
-const Message: FC<IMessageProps> = ({ messageText, sentAt, sentBy }) => {
+const Message: FC<MessagesType> = ({ messageText, sentAt, sentBy }) => {
     const uid = useAppSelector(state => state.user.uid)
 
     return (

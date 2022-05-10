@@ -1,10 +1,10 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
-import { addDoc, collection, doc, DocumentData, getDoc, getFirestore, onSnapshot, orderBy, query, serverTimestamp, setDoc, where } from "firebase/firestore";
-import { setGroups, setMessages } from "../slices/ChatSlice";
+import { addDoc, collection, doc, getDoc, getFirestore, onSnapshot, orderBy, query, serverTimestamp, setDoc, where } from "firebase/firestore";
+import { GroupType, MessagesType, setGroups, setMessages } from "../slices/ChatSlice";
 
 export const saveMessage = createAsyncThunk(
     'chat/saveMessage',
-    async (data: { groupID: any, message: string }, thunkApi) => {
+    async (data: { groupID: string, message: string }, thunkApi) => {
         const { groupID, message } = data
         try {
             const db = getFirestore();
@@ -40,7 +40,7 @@ export const addNewGroupToUser = createAsyncThunk(
 )
 export const createGroup = createAsyncThunk(
     'chat/createGroup',
-    async (data: { uid: string | undefined, usersArray: any[], groupName: string }, thunkApi) => {
+    async (data: { uid: string, usersArray: string[], groupName: string }, thunkApi) => {
         const { uid, usersArray, groupName } = data
         try {
             let groupID = undefined
@@ -52,9 +52,10 @@ export const createGroup = createAsyncThunk(
                 name: groupName
             }).then((res) => {
                 thunkApi.dispatch(updateGroup({ path: res.path, groupID: res.id }))
-                groupID = res.id
+                usersArray.forEach(user => {
+                    thunkApi.dispatch(addNewGroupToUser({ uid: user, groupID: res.id }))
+                })
             })
-            return groupID
         } catch (e) {
             return thunkApi.rejectWithValue(e)
         }
@@ -76,28 +77,24 @@ export const updateGroup = createAsyncThunk(
 )
 export const fetchGroupsById = createAsyncThunk(
     'chat/fetchGroupsById',
-    async (_, thunkApi) => {
+    async (uid: string, thunkApi) => {
         try {
-            const state: any = thunkApi.getState()
             const db = getFirestore();
-            let array: DocumentData[] = []
-            // const response = await getDoc(doc(db, `users/${state.user.uid}`))
-            // return response.data()
-            onSnapshot(query(collection(db, 'groups'), where('members', 'array-contains', state.user.uid)), (doc) => {
+            onSnapshot(query(collection(db, 'groups'), where('members', 'array-contains', uid)), (doc) => {
+                let array: GroupType[] = []
                 doc.forEach(group => {
                     if (group) {
                         array.push({
                             id: group.data().id,
-                            createdAt: group.data().createdAt.toDate().toDateString(),
+                            createdAt: group.data()?.createdAt?.toDate()?.toDateString(),
                             createdBy: group.data().createdBy,
                             members: group.data().members,
                             name: group.data().name
                         })
                     }
                 })
-                thunkApi.dispatch(setGroups({ groups: array }))
+                if (array.length) thunkApi.dispatch(setGroups(array))
             })
-
         } catch (e) {
             return thunkApi.rejectWithValue(e)
         }
@@ -106,27 +103,24 @@ export const fetchGroupsById = createAsyncThunk(
 
 export const fetchMessagesById = createAsyncThunk(
     'chat/fetchMessagesByID',
-    async (group: any, thunkApi) => {
+    async (group: string, thunkApi) => {
         try {
             const db = getFirestore();
-            let array: DocumentData[] = []
-            onSnapshot(query(collection(db, "message", group, "messages"), orderBy('sentAt', 'asc')), (doc) => {
+            const unsub = onSnapshot(query(collection(db, "message", group, "messages"), orderBy('sentAt', 'asc')), (doc) => {
+                let messages: MessagesType[] = []
                 doc.forEach(message => {
                     if (message) {
-                        array.push({
+                        messages.push({
                             messageText: message.data().messageText,
-                            sentAt: message.data().sentAt.toDate().toDateString(),
+                            sentAt: message.data()?.sentAt?.toDate()?.toDateString(),
                             sentBy: message.data().sentBy,
                         })
                     }
                 })
-                thunkApi.dispatch(setMessages({ messages: array }))
+                if (messages.length) thunkApi.dispatch(setMessages(messages))
             })
-
-
         } catch (e) {
             return thunkApi.rejectWithValue(e)
-
         }
     }
 )

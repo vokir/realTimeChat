@@ -1,31 +1,25 @@
-import React, { FC } from 'react'
+import React, { FC, useEffect } from 'react'
+import { useAppDispatch, useAppSelector } from '../../hooks/reduxHooks'
+import { fetchGroupsById } from '../../store/actionCreators/chatCreator'
+import { GroupType } from '../../store/slices/ChatSlice'
 import './ChatList.scss'
 import ListElement from './ListElement/ListElement'
-import { IListElement } from './type'
 
 const ChatList: FC = () => {
+    const userID: string = useAppSelector(state => state.user.uid)
+    const groups: GroupType[] = useAppSelector(state => state.chat.groups)
+    const dispatch = useAppDispatch()
 
-    const groups: IListElement[] = [
-        {
-            name: "boba chat",
-            id: "XL7nkmDm2C2LrQZZfFGm",
-        },
-        {
-            name: "boba chat2",
-            id: "y7nP3tkcJFODcFB8k9jG",
-        },
-        {
-            name: "boba chat2",
-            id: "YFCmaV2klxq6G9fToIfG",
-        },
-    ]
-
-
+    useEffect(() => {
+        if (userID) {
+            dispatch(fetchGroupsById(userID))
+        }
+    }, [userID])
 
     return (
         <div className="chat-list">
             <b>Список чатов</b>
-            {groups.map(group => <ListElement {...group} key={group.id} />)}
+            {groups && groups.map((group, index) => <ListElement {...group} key={index} />)}
         </div>
     )
 }

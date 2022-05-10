@@ -1,14 +1,17 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { fetchUsers } from "../actionCreators/userCreator";
+
+export type UsersType = {
+    username: string,
+    email: string,
+    uid: string
+}
 
 export interface IUserState {
-    email?: string,
-    uid?: string,
-    username?: string,
-    users?: Array<{
-        username: string,
-        email: string,
-        uid: string
-    }> | undefined
+    email: string,
+    uid: string,
+    username: string,
+    users: UsersType[]
 }
 
 const initialState: IUserState = {
@@ -32,12 +35,14 @@ const userSlice = createSlice({
             state.uid = ''
             state.username = ''
         },
-        usersFetching(state, action: PayloadAction<IUserState>) {
-            state.users = action.payload.users
-        }
     },
+    extraReducers: {
+        [fetchUsers.fulfilled.type]: (state, action: PayloadAction<UsersType[]>) => {
+            state.users = action.payload
+        },
+    }
 })
 
-export const { setUser, removeUser, usersFetching } = userSlice.actions
+export const { setUser, removeUser } = userSlice.actions
 
 export default userSlice.reducer

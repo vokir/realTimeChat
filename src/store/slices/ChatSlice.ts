@@ -2,9 +2,23 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 import { fetchGroupsById, fetchMessagesById } from "../actionCreators/chatCreator";
 
+export type GroupType = {
+    id: string,
+    name: string,
+    createdAt: string,
+    createdBy: string,
+    members: string[]
+}
+
+export type MessagesType = {
+    messageText: string,
+    sentAt: string,
+    sentBy: string
+}
+
 export interface IChatState {
-    groups?: any[],
-    messages?: any[]
+    groups: GroupType[],
+    messages: MessagesType[]
 }
 
 const initialState: IChatState = {
@@ -15,22 +29,13 @@ const chatSlice = createSlice({
     name: 'chat',
     initialState,
     reducers: {
-        setMessages(state: IChatState, action: PayloadAction<IChatState>) {
-            state.messages = action.payload.messages
+        setMessages(state: IChatState, action: PayloadAction<MessagesType[]>) {
+            state.messages = action.payload
         },
-        setGroups(state: IChatState, action: PayloadAction<IChatState>) {
-            state.groups = action.payload.groups
-
+        setGroups(state: IChatState, action: PayloadAction<GroupType[]>) {
+            state.groups = action.payload
         }
     },
-    extraReducers: {
-        [fetchGroupsById.fulfilled.type]: (state, action: PayloadAction<IChatState>) => {
-            // state.groups = action.payload.groups
-        },
-        [fetchMessagesById.fulfilled.type]: (state, action: PayloadAction<IChatState>) => {
-            // console.log(action);
-        }
-    }
 })
 
 export const { setMessages, setGroups } = chatSlice.actions

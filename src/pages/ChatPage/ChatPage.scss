@@ -26,3 +26,12 @@
 .right-side {
     grid-area: right;
 }
+
+.no-chat {
+    border: 2px solid var(--black);
+    height: 500px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 8px;
+}

@@ -1,9 +1,9 @@
 import React, { FC } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
-import { IListElement } from '../type'
+import { GroupType } from '../../../store/slices/ChatSlice'
 import './ListElement.scss'
 
-const ListElement: FC<IListElement> = ({ id, name }) => {
+const ListElement: FC<GroupType> = ({ id, name }) => {
     const navigate = useNavigate()
     const params = useParams()
 

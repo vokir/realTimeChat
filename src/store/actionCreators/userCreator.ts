@@ -1,19 +1,29 @@
+import { createAsyncThunk } from "@reduxjs/toolkit";
 import { collection, doc, getDocs, getFirestore, setDoc } from "firebase/firestore";
 import { AppDispatch } from "..";
-import { usersFetching } from "../slices/UserSlice";
+import { UsersType } from "../slices/UserSlice";
 
-export const fetchUsers = () => async (dispatch: AppDispatch) => {
-    try {
-        let users: any[] = []
-        const querySnapshot = await getDocs(collection(getFirestore(), "users"))
-        querySnapshot.forEach((doc) => {
-            users.push({ ...doc.data(), uid: doc.id })
-        });
-        dispatch(usersFetching({ users }))
-    } catch (e) {
-        console.log(e);
+export const fetchUsers = createAsyncThunk(
+    'user/fetchUsers',
+    async (_, thunkApi) => {
+        try {
+            let users: UsersType[] = []
+            const querySnapshot = await getDocs(collection(getFirestore(), "users"))
+            querySnapshot.forEach((doc) => {
+                if (doc) {
+                    users.push({
+                        email: doc.data().email,
+                        uid: doc.id,
+                        username: doc.data().username
+                    })
+                }
+            });
+            return users
+        } catch (e) {
+            return thunkApi.rejectWithValue(e)
+        }
     }
-}
+)
 
 export const addUser = (email: string, username: string, uid: string) => async (dispatch: AppDispatch) => {
     try {

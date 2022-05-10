@@ -1,34 +1,34 @@
-import React, { FC, useState } from 'react'
+import React, { FC, useEffect, useState } from 'react'
 import Button from '../ui/Button/Button'
 import Input from '../ui/Input/Input'
 import Message from './Message/Message'
-import { IMessageProps } from './type'
 import './Messages.scss'
+import { MessagesType } from '../../store/slices/ChatSlice'
+import { useAppDispatch, useAppSelector } from '../../hooks/reduxHooks'
+import { useParams } from 'react-router-dom'
+import { fetchMessagesById, saveMessage } from '../../store/actionCreators/chatCreator'
 
 const Messages: FC = () => {
-    const messages: IMessageProps[] = [
-        {
-            messageText: "Привет боба",
-            sentAt: "May 9, 2022 at 10:29:16 AM UTC+5",
-            sentBy: "rFNa3p451DbdEpqSdz5KR6ez3Vd2"
-        },
-        {
-            messageText: "привет qwe",
-            sentAt: "May 9, 2022 at 10:29:40 AM UTC+5",
-            sentBy: "E9ya2XyAYOMjj7X8Rn0et1997NJ2"
-        },
-        {
-            messageText: "qq",
-            sentAt: "May 9, 2022 at 10:32:20 AM UTC+5",
-            sentBy: "E9ya2XyAYOMjj7X8Rn0et1997NJ2"
-        },
+    const dispatch = useAppDispatch()
+    const params = useParams()
 
-    ]
+    useEffect(() => {
+        if (params.id) {
+            dispatch(fetchMessagesById(params.id))
+        }
+
+    }, [params.id])
+
+    const messages: MessagesType[] = useAppSelector(state => state.chat.messages)
+
     const [message, setMessage] = useState<string>('')
 
     const sendMessage = () => {
-        // ...
-        setMessage('')
+        if (message && params.id) {
+            dispatch(saveMessage({ groupID: params.id, message }))
+
+            setMessage('')
+        }
     }
 
     return (
