@@ -1,4 +1,4 @@
-import { getAuth } from 'firebase/auth'
+import { getAuth, signOut } from 'firebase/auth'
 import React, { FC } from 'react'
 import { NavLink, useParams } from 'react-router-dom'
 import { Outlet } from 'react-router-dom'
@@ -17,7 +17,7 @@ const Chat: FC = () => {
 
     const logout = () => {
         setTimeout(() => {
-            auth.signOut()
+            signOut(auth)
             dispatch(removeUser())
         }, 1000)
     }

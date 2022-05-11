@@ -1,7 +1,5 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
-import { fetchGroupsById, fetchMessagesById } from "../actionCreators/chatCreator";
-
 export type GroupType = {
     id: string,
     name: string,

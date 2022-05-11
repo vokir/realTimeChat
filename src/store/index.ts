@@ -15,7 +15,7 @@ export const store = configureStore({
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({
       serializableCheck: {
-        ignoredPaths: ['firebase', 'firestore'],
+          ignoredActions: ['chat/fetchMessagesByID/fulfilled', 'chat/fetchGroupsById/fulfilled'],
       },
       thunk: {
         extraArgument: {

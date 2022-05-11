@@ -11,8 +11,17 @@ const ChatList: FC = () => {
     const dispatch = useAppDispatch()
 
     useEffect(() => {
+        let unsub: unknown
         if (userID) {
             dispatch(fetchGroupsById(userID))
+                .then(resonse => {
+                    if (resonse.meta.requestStatus === 'fulfilled') {
+                        unsub = resonse.payload
+                    }
+                })
+        }
+        return () => {
+            if (typeof (unsub) === 'function') unsub()
         }
     }, [userID])
 

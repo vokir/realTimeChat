@@ -43,7 +43,6 @@ export const createGroup = createAsyncThunk(
     async (data: { uid: string, usersArray: string[], groupName: string }, thunkApi) => {
         const { uid, usersArray, groupName } = data
         try {
-            let groupID = undefined
             const db = getFirestore();
             await addDoc(collection(db, "groups"), {
                 createdAt: serverTimestamp(),
@@ -80,7 +79,7 @@ export const fetchGroupsById = createAsyncThunk(
     async (uid: string, thunkApi) => {
         try {
             const db = getFirestore();
-            onSnapshot(query(collection(db, 'groups'), where('members', 'array-contains', uid)), (doc) => {
+            return onSnapshot(query(collection(db, 'groups'), where('members', 'array-contains', uid)), (doc) => {
                 let array: GroupType[] = []
                 doc.forEach(group => {
                     if (group) {
@@ -106,7 +105,7 @@ export const fetchMessagesById = createAsyncThunk(
     async (group: string, thunkApi) => {
         try {
             const db = getFirestore();
-            const unsub = onSnapshot(query(collection(db, "message", group, "messages"), orderBy('sentAt', 'asc')), (doc) => {
+            return onSnapshot(query(collection(db, "message", group, "messages"), orderBy('sentAt', 'asc')), (doc) => {
                 let messages: MessagesType[] = []
                 doc.forEach(message => {
                     if (message) {
