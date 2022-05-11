@@ -38,7 +38,9 @@ const UserSearch = () => {
     const computedUsers = useMemo(() => getFilteredItems(state.query, users), [state.query, users])
 
     const createChat = () => {
-        if (state.uid.length && state.username.length) return
+
+        if (!state.uid.length || !state.username.length) return
+
         dispatch(createGroup({
             groupName: state.username,
             uid: state.uid,
@@ -88,4 +90,4 @@ const UserSearch = () => {
     )
 }
 
-export default UserSearch   
+export default UserSearch
