@@ -30,12 +30,15 @@ const chatSlice = createSlice({
         setMessages(state: IChatState, action: PayloadAction<MessagesType[]>) {
             state.messages = action.payload
         },
+        setMessage(state: IChatState, action: PayloadAction<MessagesType[]>) {
+            state.messages = action.payload.concat(state.messages)
+        },
         setGroups(state: IChatState, action: PayloadAction<GroupType[]>) {
             state.groups = action.payload
         }
     },
 })
 
-export const { setMessages, setGroups } = chatSlice.actions
+export const { setMessages, setGroups, setMessage } = chatSlice.actions
 
 export default chatSlice.reducer

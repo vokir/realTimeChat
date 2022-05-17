@@ -14,9 +14,6 @@ export const store = configureStore({
   reducer: rootReducer,
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({
-      serializableCheck: {
-          ignoredActions: ['chat/fetchMessagesByID/fulfilled', 'chat/fetchGroupsById/fulfilled'],
-      },
       thunk: {
         extraArgument: {
           getFirestore,
