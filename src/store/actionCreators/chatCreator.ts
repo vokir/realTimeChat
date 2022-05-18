@@ -13,7 +13,7 @@ export const saveMessage = createAsyncThunk(
                 messageText: message,
                 sentAt: serverTimestamp(),
                 sentBy: state.user.uid
-            });
+            })
         } catch (e) {
             return thunkApi.rejectWithValue(e)
         }

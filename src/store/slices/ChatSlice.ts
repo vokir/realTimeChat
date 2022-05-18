@@ -31,7 +31,7 @@ const chatSlice = createSlice({
             state.messages = action.payload
         },
         setMessage(state: IChatState, action: PayloadAction<MessagesType[]>) {
-            state.messages = action.payload.concat(state.messages)
+            state.messages = state.messages.concat(action.payload)
         },
         setGroups(state: IChatState, action: PayloadAction<GroupType[]>) {
             state.groups = action.payload

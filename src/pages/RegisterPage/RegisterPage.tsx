@@ -17,7 +17,9 @@ const Register: FC = () => {
     const push = useNavigate()
     const dispatch = useAppDispatch()
 
-    const register = () => {
+    const register = (e: React.FormEvent<HTMLFormElement>) => {
+        e.preventDefault()
+
         const auth = getAuth();
         setLoading(true)
         setTimeout(() => {
@@ -41,11 +43,11 @@ const Register: FC = () => {
     }
 
     return (
-        <Form id="register">
+        <Form id="register" onSubmit={(e: React.FormEvent<HTMLFormElement>) => register(e)}>
             <Input type="text" value={name} onChange={(e: React.ChangeEvent<HTMLInputElement>) => setName(e.target.value)} label='Имя' name='name' />
             <Input type="email" value={email} onChange={(e: React.ChangeEvent<HTMLInputElement>) => setEmail(e.target.value)} label='E-mail' name='email' />
             <Input type="password" value={pass} onChange={(e: React.ChangeEvent<HTMLInputElement>) => setPass(e.target.value)} label='Пароль' name='pass' />
-            <Button loading={loading} onClick={register}>Зарегистрироваться</Button>
+            <Button loading={loading}>Зарегистрироваться</Button>
             <NavLink className="link" to={'/login'}>войти</NavLink>
         </Form>
     )

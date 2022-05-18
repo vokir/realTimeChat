@@ -6,5 +6,5 @@ initializeApp({
     projectId: "reactrealtimechat",
     storageBucket: "reactrealtimechat.appspot.com",
     messagingSenderId: "174959870392",
-    appId: "1:174959870392:web:52840d114b235c0b7fcf4d"
+    appId: "1:174959870392:web:52840d114b235c0b7fcf4d",
 });

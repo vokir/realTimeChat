@@ -5,18 +5,19 @@ import Message from './Message/Message'
 import './Messages.scss'
 import { MessagesType, setMessages, setMessage } from '../../store/slices/ChatSlice'
 import { useAppDispatch, useAppSelector } from '../../hooks/reduxHooks'
-import { useParams } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
 import { saveMessage } from '../../store/actionCreators/chatCreator'
 import { collection, DocumentData, getDocs, getFirestore, limit, onSnapshot, orderBy, query, startAfter } from 'firebase/firestore'
 
 const Messages: FC = () => {
     const dispatch = useAppDispatch()
     const params = useParams()
+    const navigate = useNavigate()
     const messageBlock: React.RefObject<HTMLInputElement> = useRef(null)
-    const childRef: React.RefObject<HTMLInputElement> = useRef(null)
     const messages: MessagesType[] = useAppSelector(state => state.chat.messages)
     const [message, setMessageValue] = useState<string>('')
     const [lastVisible, setLastVisible] = useState<DocumentData>([])
+    const [loading, setLoading] = useState<boolean>(true)
 
     const fetchMessages = async (id: string) => {
         let messages: MessagesType[] = []
@@ -33,76 +34,102 @@ const Messages: FC = () => {
                 sentBy: doc.data().sentBy,
             })
         });
-        dispatch(setMessage(messages.reverse()))
+        dispatch(setMessages(messages.reverse()))
     }
 
+    const exitChat = () => {
+        navigate('chat')
+    }
 
-    // useEffect(() => {
-    //     if (params.id) {
-    //         fetchMessages(params.id)
-    //     }
-    // }, [lastVisible])
+    const sendMessage = (e: React.FormEvent<HTMLFormElement>) => {
+        e.preventDefault();
+
+        if (message && params.id) {
+            dispatch(saveMessage({ groupID: params.id, message }))
+            setMessageValue('')
+        }
+    }
+
+    const scrollToEnd = (behavior: boolean = true) => {
+
+        if (messageBlock.current) {
+            console.log(messageBlock.current.scrollHeight);
+            messageBlock.current.scrollTo({
+                behavior: behavior ? "smooth" : "auto",
+                top: messageBlock.current.scrollHeight
+            })
+        }
+
+    }
+
     useEffect(() => {
         if (params.id) {
-
             const unsub = onSnapshot(query(collection(getFirestore(), "message", params.id, "messages"), orderBy('sentAt', 'desc'), limit(10)), (doc) => {
                 let messages: MessagesType[] = []
                 let docs: DocumentData[] = []
 
-                doc.docChanges().forEach((change) => {
-                    if (change.type === "added") {
-                        if (change.doc) {
-                            messages.push({
-                                messageText: change.doc.data().messageText,
-                                sentAt: change.doc.data()?.sentAt?.toDate()?.toDateString(),
-                                sentBy: change.doc.data().sentBy,
-                            })
-                            docs.push(change.doc)
+                if (!doc.metadata.hasPendingWrites) {
+                    doc.docChanges().forEach((change) => {
+                        if (change.type === "added" || change.type === 'modified') {
+                            if (change.doc) {
+                                messages.push({
+                                    messageText: change.doc.data().messageText,
+                                    sentAt: change.doc.data()?.sentAt?.toDate()?.toDateString(),
+                                    sentBy: change.doc.data().sentBy,
+                                })
+                                docs.push(change.doc)
+                            }
                         }
+                    })
+                    if (messages.length === 1) {
+                        dispatch(setMessage(messages))
+                    } else {
+                        setLastVisible(docs[docs.length - 1])
+                        dispatch(setMessages(messages.reverse()))
                     }
-                })
-
-                if (messages.length > 1) {
-                    setLastVisible(docs[docs.length - 1])
-                    dispatch(setMessages(messages.reverse()))
-                } else {
-                    dispatch(setMessage(messages))
+                    setTimeout(() => setLoading(false), 500)
                 }
-                scrollToEnd(false)
             })
             return () => {
+                setLoading(true)
                 unsub()
             }
         }
     }, [params.id])
 
-    const sendMessage = () => {
-        if (message && params.id) {
-            dispatch(saveMessage({ groupID: params.id, message }))
-            setMessageValue('')
+    useEffect(() => {
+        scrollToEnd(false)
+    }, [loading])
+
+    useEffect(() => {
+        if (!loading) {
             scrollToEnd()
         }
-    }
+    }, [messages])
 
-    const scrollToEnd = (behavior: boolean = true) => {
-        if (messageBlock.current) {
-            messageBlock.current.scrollTo({
-                behavior: behavior ? "smooth" : "auto",
-                top: messageBlock.current.scrollHeight + 15
-            })
+    useEffect(() => {
+        document.body.addEventListener('keyup', exitChat)
+        return () => {
+            document.body.removeEventListener('keyup', exitChat)
         }
+    }, [])
 
-    }
+    if (loading) return <div className='no-chat'>Загрузка ваших сообщений...</div>
 
     return (
         <section className="messages">
-            <div ref={messageBlock} className="messages__container">
-                {messages.map((message, index) => <Message {...message} key={index} />)}
-            </div>
-            <div className="messages__input">
+            {messages.length
+                ?
+                <div ref={messageBlock} className="messages__container">
+                    {messages.map((message, index) => <Message {...message} key={index} />)}
+                </div>
+                :
+                <div className='no-chat'>Сообщений ещё нет, напишите первым</div>
+            }
+            <form className="messages__input" onSubmit={(e: React.FormEvent<HTMLFormElement>) => sendMessage(e)}>
                 <Input label='Отправить сообщение' name='message' value={message} onChange={(e: React.ChangeEvent<HTMLInputElement>) => setMessageValue(e.target.value)} />
-                <Button type='submit' onClick={() => sendMessage()}>Отправить</Button>
-            </div>
+                <Button type='submit'>Отправить</Button>
+            </form>
         </section>
     )
 }

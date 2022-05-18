@@ -19,7 +19,8 @@ const Login: FC = () => {
 
     const dispatch = useAppDispatch()
 
-    const login = () => {
+    const login = (e: React.FormEvent<HTMLFormElement>) => {
+        e.preventDefault()
         const auth = getAuth();
         setLoading(true)
         setTimeout(() => {
@@ -38,10 +39,10 @@ const Login: FC = () => {
     }
 
     return (
-        <Form id="login">
+        <Form id="login" onSubmit={(e: React.FormEvent<HTMLFormElement>) => login(e)}>
             <Input type="email" value={email} onChange={(e: React.ChangeEvent<HTMLInputElement>) => setEmail(e.target.value)} label='E-mail' name='email' />
             <Input type="password" value={pass} onChange={(e: React.ChangeEvent<HTMLInputElement>) => setPass(e.target.value)} label='Пароль' name='pass' />
-            <Button loading={loading} onClick={login}>Войти</Button>
+            <Button type='submit' loading={loading}>Войти</Button>
             <NavLink className="link" to={'/register'}>зарегистрироваться</NavLink>
         </Form>
     )
