@@ -12,6 +12,7 @@
     }
 
     &--active {
+        pointer-events: none;
         background: var(--primary);
     }
 }

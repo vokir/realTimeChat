@@ -1,4 +1,4 @@
-import { collection, getFirestore, onSnapshot, query, where } from 'firebase/firestore'
+import { collection, getFirestore, onSnapshot, orderBy, query, where } from 'firebase/firestore'
 import React, { FC, useEffect } from 'react'
 import { useAppDispatch, useAppSelector } from '../../hooks/reduxHooks'
 import { GroupType, setGroups } from '../../store/slices/ChatSlice'
@@ -25,6 +25,15 @@ const ChatList: FC = () => {
                         })
                     }
                 })
+                groups.sort((a, b) => {
+                    if (a.name > b.name) {
+                        return 1;
+                    }
+                    if (a.name < b.name) {
+                        return -1;
+                    }
+                    return 0;
+                })
                 dispatch(setGroups(groups))
             })
 
@@ -36,8 +45,8 @@ const ChatList: FC = () => {
 
     return (
         <div className="chat-list">
-            <b>Список чатов</b>
-            {groups && groups.map((group, index) => <ListElement {...group} key={index} />)}
+            <b>{groups.length ? "Список чатов" : "У вас ещё нет чатов"}</b>
+            {Boolean(groups.length) && groups.map((group, index) => <ListElement {...group} key={index} />)}
         </div>
     )
 }

@@ -20,10 +20,10 @@ export const publicRoutes: RouteObject[] = [
 ]
 
 export const privateRoutes: RouteObject[] = [
-    {
-        path: '*',
-        element: <Navigate to="/chat" replace />
-    },
+    // {
+    //     path: '*',
+    //     element: <Navigate to="/chat" replace />
+    // },
     {
         path: "/chat",
         element: <Chat />,

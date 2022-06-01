@@ -8,12 +8,14 @@ import { useAppDispatch, useAppSelector } from '../../hooks/reduxHooks'
 import { useNavigate, useParams } from 'react-router-dom'
 import { saveMessage } from '../../store/actionCreators/chatCreator'
 import { collection, DocumentData, getDocs, getFirestore, limit, onSnapshot, orderBy, query, startAfter } from 'firebase/firestore'
+import { useInfinite } from '../../hooks/useInfinitePagination'
 
 const Messages: FC = () => {
     const dispatch = useAppDispatch()
     const params = useParams()
     const navigate = useNavigate()
-    const messageBlock: React.RefObject<HTMLInputElement> = useRef(null)
+    const messageBlock: React.RefObject<HTMLDivElement> = useRef(null)
+    const hidden: React.RefObject<HTMLDivElement> = useRef(null)
     const messages: MessagesType[] = useAppSelector(state => state.chat.messages)
     const [message, setMessageValue] = useState<string>('')
     const [lastVisible, setLastVisible] = useState<DocumentData>([])
@@ -37,8 +39,8 @@ const Messages: FC = () => {
         dispatch(setMessages(messages.reverse()))
     }
 
-    const exitChat = () => {
-        navigate('chat')
+    const exitChat = (e: KeyboardEvent) => {
+        if (e.key === "Escape") navigate('/chat')
     }
 
     const sendMessage = (e: React.FormEvent<HTMLFormElement>) => {
@@ -53,7 +55,6 @@ const Messages: FC = () => {
     const scrollToEnd = (behavior: boolean = true) => {
 
         if (messageBlock.current) {
-            console.log(messageBlock.current.scrollHeight);
             messageBlock.current.scrollTo({
                 behavior: behavior ? "smooth" : "auto",
                 top: messageBlock.current.scrollHeight

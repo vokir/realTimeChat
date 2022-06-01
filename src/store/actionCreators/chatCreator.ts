@@ -43,7 +43,7 @@ export const createGroup = createAsyncThunk(
         const { uid, usersArray, groupName } = data
         try {
             const db = getFirestore();
-            await addDoc(collection(db, "groups"), {
+            return await addDoc(collection(db, "groups"), {
                 createdAt: serverTimestamp(),
                 createdBy: uid,
                 members: usersArray,
@@ -53,6 +53,7 @@ export const createGroup = createAsyncThunk(
                 usersArray.forEach(user => {
                     thunkApi.dispatch(addNewGroupToUser({ uid: user, groupID: res.id }))
                 })
+                return res.id
             })
         } catch (e) {
             return thunkApi.rejectWithValue(e)

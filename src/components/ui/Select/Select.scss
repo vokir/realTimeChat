@@ -1,0 +1,28 @@
+.select-container {
+  position: relative;
+  z-index: 1;
+}
+
+.select-options {
+  position: absolute;
+  top: 38px;
+  background: white;
+  width: 100%;
+  padding: 10px 0 0;
+  margin: 0;
+  z-index: -1;
+  border-radius: 8px;
+
+  &__item {
+      padding: 10px;
+      display: flex;
+      align-items: center;
+      font-size: 16px;
+      cursor: pointer;
+      transition: all 0.25s ease-in-out;
+
+      &:hover {
+          color: var(--primary);
+      }
+  }
+}
