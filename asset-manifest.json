@@ -1,17 +1,17 @@
 {
   "files": {
-    "main.css": "/realTimeChat/static/css/main.d1470429.css",
-    "main.js": "/realTimeChat/static/js/main.879287b1.js",
+    "main.css": "/realTimeChat/static/css/main.f0522919.css",
+    "main.js": "/realTimeChat/static/js/main.bb9eecc0.js",
     "static/media/Montserrat-Medium.ttf": "/realTimeChat/static/media/Montserrat-Medium.3a0917345468c959207a.ttf",
     "static/media/Montserrat-Bold.ttf": "/realTimeChat/static/media/Montserrat-Bold.63fae500fdcf19ce83d4.ttf",
     "static/media/Montserrat-Light.ttf": "/realTimeChat/static/media/Montserrat-Light.f0963fd9968fbd54cc35.ttf",
     "static/media/Montserrat-Regular.ttf": "/realTimeChat/static/media/Montserrat-Regular.ac98a5f5ca71180fe293.ttf",
     "index.html": "/realTimeChat/index.html",
-    "main.d1470429.css.map": "/realTimeChat/static/css/main.d1470429.css.map",
-    "main.879287b1.js.map": "/realTimeChat/static/js/main.879287b1.js.map"
+    "main.f0522919.css.map": "/realTimeChat/static/css/main.f0522919.css.map",
+    "main.bb9eecc0.js.map": "/realTimeChat/static/js/main.bb9eecc0.js.map"
   },
   "entrypoints": [
-    "static/css/main.d1470429.css",
-    "static/js/main.879287b1.js"
+    "static/css/main.f0522919.css",
+    "static/js/main.bb9eecc0.js"
   ]
 }
