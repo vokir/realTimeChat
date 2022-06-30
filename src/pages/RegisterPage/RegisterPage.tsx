@@ -47,7 +47,7 @@ const Register: FC = () => {
             <Input type="text" value={name} onChange={(e: React.ChangeEvent<HTMLInputElement>) => setName(e.target.value)} label='Имя' name='name' />
             <Input type="email" value={email} onChange={(e: React.ChangeEvent<HTMLInputElement>) => setEmail(e.target.value)} label='E-mail' name='email' />
             <Input type="password" value={pass} onChange={(e: React.ChangeEvent<HTMLInputElement>) => setPass(e.target.value)} label='Пароль' name='pass' />
-            <Button loading={loading}>Зарегистрироваться</Button>
+            <Button type='submit' loading={loading}>Зарегистрироваться</Button>
             <NavLink className="link" to={'/login'}>войти</NavLink>
         </Form>
     )

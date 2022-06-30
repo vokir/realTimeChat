@@ -6,7 +6,6 @@ import ChatList from '../../components/ChatList/ChatList'
 import Button from '../../components/ui/Button/Button'
 import UserSearch from '../../components/UserSearch/UserSearch'
 import { useAppDispatch } from '../../hooks/reduxHooks'
-
 import { removeUser } from '../../store/slices/UserSlice'
 import './ChatPage.scss'
 
@@ -24,7 +23,7 @@ const Chat: FC = () => {
     return (
         <div className='container chat__container'>
             <div className="chat__header">
-                <NavLink to={'/'}>Типо хедер</NavLink>
+                <NavLink to={'/'}>Чат</NavLink>
                 <Button onClick={() => logout()} type={'submit'} >выйти</Button>
             </div>
             <div className="left-side">

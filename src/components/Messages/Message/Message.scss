@@ -21,6 +21,15 @@
         color: var(--light-gray);
     }
 
+    &__name {
+        font-size: 12px;
+        font-weight: bold;
+        line-height: 150%;
+        color: var(--light-gray);
+        align-self: flex-start;
+
+    }
+
     &--you {
         margin-left: auto;
         margin-right: 0;

@@ -11,7 +11,8 @@ export type GroupType = {
 export type MessagesType = {
     messageText: string,
     sentAt: string,
-    sentBy: string
+    sentBy: string,
+    name: string
 }
 
 export interface IChatState {

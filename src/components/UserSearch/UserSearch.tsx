@@ -5,22 +5,15 @@ import { createGroup } from '../../store/actionCreators/chatCreator';
 import { fetchUsers } from '../../store/actionCreators/userCreator';
 import { UsersType } from '../../store/slices/UserSlice';
 import Button from '../ui/Button/Button';
-import Select from '../ui/Select/Select';
+// import Select from '../ui/Select/Select';
 import './UserSearch.scss'
-
-interface Selected {
-    uid: string,
-    username: string,
-    email: string,
-}
+import Multiselect from 'multiselect-react-dropdown';
+import Input from '../ui/Input/Input';
 
 const UserSearch = () => {
-    const [selected, setSelected] = useState<Selected>({
-        uid: '',
-        username: '',
-        email: '',
-    })
-    const [selectValue, setSelectValue] = useState<string>('')
+
+    const [selected, setSelected] = useState<string[]>([])
+    const [chatName, setchatName] = useState<string>('')
 
     const users: UsersType[] = useAppSelector(state => state.user.users)
     const usersID: string = useAppSelector(state => state.user.uid)
@@ -32,40 +25,56 @@ const UserSearch = () => {
     }, [])
 
     const createChat = () => {
-
-        if (!selected.uid.length || !selected.username.length) return
+        
+        if (!selected.length) return
 
         dispatch(createGroup({
-            groupName: selected.username,
-            uid: selected.uid,
-            usersArray: [
-                selected.uid,
-                usersID
-            ],
+            groupName: chatName,
+            uid: usersID,
+            usersArray: [...selected, usersID],
         })).then(res => {
             if (typeof res.payload === "string") {
                 navigate('/chat/' + res.payload)
             }
         })
-        setSelected({
-            uid: '',
-            username: '',
-            email: '',
-        })
-        setSelectValue('')
+        setSelected([])
+        setchatName('')
+    }
+
+    const onSelect = (selectedList:UsersType[], selectedItem: UsersType) => {
+        setSelected([...selected, selectedItem.uid])
+    }
+    const onRemove = (selectedList:UsersType[], removedItem: UsersType) => {
+        setSelected(selected.filter(t => t !== removedItem.uid))
     }
 
     return (
         <div className="user-search">
-            <Select
+            <Multiselect
+                className='user-select'
+                options={users}
+                hidePlaceholder
+                displayValue="username"
+                placeholder={'Пользователи'}
+                onSelect={onSelect}
+                onRemove={onRemove}
+            />
+            <Input
+                classes='input-group'
+                label='Название чата' 
+                name='message' 
+                value={chatName} 
+                onChange={(e: React.ChangeEvent<HTMLInputElement>) => setchatName(e.target.value)} 
+            />
+            {/* <Select
                 classes='user-select'
                 value={selectValue}
                 onChange={(value) => setSelectValue(value)}
                 onSelect={(value) => setSelected({ ...value })}
                 options={users}
                 label="username"
-            />
-            {selected.username !== '' && <Button onClick={() => createChat()}>Создать чат</Button>}
+            /> */}
+            {Boolean(selected.length) && <Button onClick={() => createChat()}>Создать чат</Button>}
         </div>
     )
 }

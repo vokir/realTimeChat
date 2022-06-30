@@ -8,14 +8,12 @@ import { useAppDispatch, useAppSelector } from '../../hooks/reduxHooks'
 import { useNavigate, useParams } from 'react-router-dom'
 import { saveMessage } from '../../store/actionCreators/chatCreator'
 import { collection, DocumentData, getDocs, getFirestore, limit, onSnapshot, orderBy, query, startAfter } from 'firebase/firestore'
-import { useInfinite } from '../../hooks/useInfinitePagination'
 
 const Messages: FC = () => {
     const dispatch = useAppDispatch()
     const params = useParams()
     const navigate = useNavigate()
     const messageBlock: React.RefObject<HTMLDivElement> = useRef(null)
-    const hidden: React.RefObject<HTMLDivElement> = useRef(null)
     const messages: MessagesType[] = useAppSelector(state => state.chat.messages)
     const [message, setMessageValue] = useState<string>('')
     const [lastVisible, setLastVisible] = useState<DocumentData>([])
@@ -34,6 +32,7 @@ const Messages: FC = () => {
                 messageText: doc.data().messageText,
                 sentAt: doc.data()?.sentAt?.toDate()?.toDateString(),
                 sentBy: doc.data().sentBy,
+                name: doc.data().name
             })
         });
         dispatch(setMessages(messages.reverse()))
@@ -65,7 +64,8 @@ const Messages: FC = () => {
 
     useEffect(() => {
         if (params.id) {
-            const unsub = onSnapshot(query(collection(getFirestore(), "message", params.id, "messages"), orderBy('sentAt', 'desc'), limit(10)), (doc) => {
+            // const unsub = onSnapshot(query(collection(getFirestore(), "message", params.id, "messages"), orderBy('sentAt', 'desc'), limit(10)), (doc) => {
+            const unsub = onSnapshot(query(collection(getFirestore(), "message", params.id, "messages"), orderBy('sentAt', 'desc')), (doc) => {
                 let messages: MessagesType[] = []
                 let docs: DocumentData[] = []
 
@@ -77,6 +77,7 @@ const Messages: FC = () => {
                                     messageText: change.doc.data().messageText,
                                     sentAt: change.doc.data()?.sentAt?.toDate()?.toDateString(),
                                     sentBy: change.doc.data().sentBy,
+                                    name: change.doc.data().name
                                 })
                                 docs.push(change.doc)
                             }

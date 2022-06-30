@@ -12,7 +12,8 @@ export const saveMessage = createAsyncThunk(
             await addDoc(collection(db, "message", groupID, "messages"), {
                 messageText: message,
                 sentAt: serverTimestamp(),
-                sentBy: state.user.uid
+                sentBy: state.user.uid,
+                name: state.user.username
             })
         } catch (e) {
             return thunkApi.rejectWithValue(e)
