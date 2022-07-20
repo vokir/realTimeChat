@@ -8,7 +8,7 @@ import './assests/style/style.scss'
 
 const container = document.getElementById('root')!;
 const root = createRoot(container as HTMLElement);
-
+ 
 root.render(
   <Provider store={store}>
     <BrowserRouter>
